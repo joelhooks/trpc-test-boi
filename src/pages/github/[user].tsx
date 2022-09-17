@@ -2,11 +2,12 @@ import type {NextPage} from "next";
 import Head from "next/head";
 import {trpc} from "../../utils/trpc";
 import {useRouter} from "next/router";
+import Image from "next/image";
 
 const GithubUser: NextPage = () => {
   const {query} = useRouter()
-  const hello = trpc.useQuery(["github.getUser", {username: query.user as string}]);
-  return (
+  const {data} = trpc.useQuery(["github.getUser", {username: query.user as string}]);
+  return data ? (
     <>
       <Head>
         <title>Create T3 App</title>
@@ -15,10 +16,11 @@ const GithubUser: NextPage = () => {
       </Head>
 
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        {JSON.stringify(hello)}
+        {data.login}
+        <Image height={64} width={64} src={data.avatar_url}/>
       </main>
     </>
-  );
+  ) : null
 };
 
 export default GithubUser;

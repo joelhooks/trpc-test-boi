@@ -15,7 +15,8 @@ export const githubRouter = createRouter().query("getUser", {
       username: z.string(),
     }),
   async resolve({ input }) {
-    const user = await fetch(`https://api.github.com/users/${input.username}`).then((response) => response.json())
-    return GithubUserSchema.parse(user);
+    const data = await fetch(`https://api.github.com/users/${input.username}`).then((response) => response.json())
+
+    return GithubUserSchema.parse(data);
   },
 });
